@@ -1,4 +1,4 @@
-## About this classes
+## About this class
 
 This class make it easier to use `UIAlertView` with blocks.
 
