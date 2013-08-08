@@ -25,12 +25,36 @@ _Note: You may also be interested in [OHActionSheet](https://github.com/AliSoftw
              NSLog(@"Yes");
          }
      }];
+     
+## Alerts with timeout
 
-## Additional Notes
+You can also use this class to generate an AlertView that will be dismissed after a given time.
+_(You can even add a dynamic text on your alert to display the live countdown)_
+
+    [[[OHAlertView alloc] initWithTitle:@"Alert Demo"
+                                message:@"This is a demo message"
+                           cancelButton:nil
+                           otherButtons:[NSArray arrayWithObject:@"OK"]
+                         onButtonTapped:^(OHAlertView* alert, NSInteger buttonIndex)
+      {
+          if (buttonIndex == -1)
+          {
+              self.status.text = @"Demo alert dismissed automatically after timeout!";
+          }
+          else
+          {
+              self.status.text = @"Demo alert dismissed by user!";
+          }
+      }] showWithTimeout:12 timeoutButtonIndex:-1 timeoutMessageFormat:@"(Alert dismissed in %lus)"];
+
+## Compatibility Notes
 
 * This class uses blocks, which is a feature introduced in iOS 4.0.
 * This class is compatible with both ARC and non-ARC projects.
-* This code is under MIT License.
+
+## License
+
+This code is under MIT License.
 
 ## CocoaPods
 

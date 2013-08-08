@@ -67,23 +67,21 @@
 
 -(IBAction)showAlert3
 {
-    OHAlertView* alert =
-	[[OHAlertView alloc] initWithTitle:@"Alert Demo"
-                               message:@"This is a demo message"
-                          cancelButton:nil
-                          otherButtons:[NSArray arrayWithObject:@"OK"]
-                        onButtonTapped:^(OHAlertView* alert, NSInteger buttonIndex)
-	 {
-         if (buttonIndex == -1)
-         {
-             self.status.text = @"Demo alert dismissed automatically after timeout!";
-         }
-         else
-         {
-             self.status.text = @"Demo alert dismissed by user!";
-         }
-	 }];
-    [alert showWithTimeout:12 timeoutButtonIndex:-1 timeoutMessageFormat:@"(Alert dismissed in %lus)"];
+    [[[OHAlertView alloc] initWithTitle:@"Alert Demo"
+                                message:@"This is a demo message"
+                           cancelButton:nil
+                           otherButtons:[NSArray arrayWithObject:@"OK"]
+                         onButtonTapped:^(OHAlertView* alert, NSInteger buttonIndex)
+      {
+          if (buttonIndex == -1)
+          {
+              self.status.text = @"Demo alert dismissed automatically after timeout!";
+          }
+          else
+          {
+              self.status.text = @"Demo alert dismissed by user!";
+          }
+      }] showWithTimeout:12 timeoutButtonIndex:-1 timeoutMessageFormat:@"(Alert dismissed in %lus)"];
 }
 
 
