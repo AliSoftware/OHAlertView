@@ -28,9 +28,9 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
  */
 +(void)showAlertWithTitle:(NSString *)title
                   message:(NSString *)message
-			 cancelButton:(NSString *)cancelButtonTitle
-			 otherButtons:(NSArray *)otherButtonTitles
-		   onButtonTapped:(OHAlertViewButtonHandler)handler;
+             cancelButton:(NSString *)cancelButtonTitle
+             otherButtons:(NSArray *)otherButtonTitles
+            buttonHandler:(OHAlertViewButtonHandler)handler;
 
 /**
  *	Create and immediately display an AlertView with two buttons.
@@ -43,13 +43,13 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
  *          - The OHAlertView as its first parameter, useful to get the firstOtherButtonIndex from it for example
  *          - The NSInteger as its second parameter, representing the index of the button that has been tapped
  *
- *  @note This is a commodity method, equivalent of calling showAlertWithTitle:cancelButton:otherButtons:onButtonTapped: with @[okButton] for the "otherButtons:" parameter
+ *  @note This is a commodity method, equivalent of calling showAlertWithTitle:cancelButton:otherButtons:buttonHandler: with @[okButton] for the "otherButtons:" parameter
  */
 +(void)showAlertWithTitle:(NSString *)title
                   message:(NSString *)message
-			 cancelButton:(NSString *)cancelButtonTitle
-				 okButton:(NSString *)okButton // same as using a 1-item array for otherButtons
-		   onButtonTapped:(OHAlertViewButtonHandler)handler;
+             cancelButton:(NSString *)cancelButtonTitle
+                 okButton:(NSString *)okButton // same as using a 1-item array for otherButtons
+            buttonHandler:(OHAlertViewButtonHandler)handler;
 
 /**
  *	Create and immediately display an AlertView with only one button.
@@ -58,6 +58,8 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
  *	@param	message	The message of the AlertView (see UIAlertView)
  *	@param	dismissButtonTitle	The title for the only button, acting as a "cancel" button
  *
+ *  @note This is a commodity method, equivalent of calling 
+ *   showAlertWithTitle:cancelButton:otherButtons:buttonHandler: with otherButtons and buttonHandler set to nil.
  *  @note This method has no OHAlertViewButtonHandler parameter as it is intended to be used
  *        to display simply informational alerts.
  */
@@ -81,7 +83,7 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
                      message:(NSString *)message
                 cancelButton:(NSString *)cancelButtonTitle
                 otherButtons:(NSArray *)otherButtonTitles
-              onButtonTapped:(OHAlertViewButtonHandler)handler;
+               buttonHandler:(OHAlertViewButtonHandler)handler;
 
 /////////////////////////////////////////////////////////////////////////////
 

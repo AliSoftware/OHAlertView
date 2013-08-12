@@ -15,7 +15,7 @@ _Note: You may also be interested in [OHActionSheet](https://github.com/AliSoftw
                             message:@"You like this sample?"
                        cancelButton:@"No"
                            okButton:@"Yes"
-                     onButtonTapped:^(OHAlertView* alert, NSInteger buttonIndex)
+                      buttonHandler:^(OHAlertView* alert, NSInteger buttonIndex)
      {
          NSLog(@"button tapped: %d",buttonIndex);
      
@@ -35,7 +35,7 @@ _(You can even add a dynamic text on your alert to display the live countdown)_
                                 message:@"This is a demo message"
                            cancelButton:nil
                            otherButtons:[NSArray arrayWithObject:@"OK"]
-                         onButtonTapped:^(OHAlertView* alert, NSInteger buttonIndex)
+                          buttonHandler:^(OHAlertView* alert, NSInteger buttonIndex)
       {
           if (buttonIndex == -1)
           {

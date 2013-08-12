@@ -18,7 +18,7 @@
                             message:@"Welcome to this sample"
                        cancelButton:nil
                            okButton:@"Thanks!"
-                     onButtonTapped:^(OHAlertView* alert, NSInteger buttonIndex)
+                      buttonHandler:^(OHAlertView* alert, NSInteger buttonIndex)
 	 {
 		 self.status.text = @"Welcome !";
 	 }];
@@ -33,7 +33,7 @@
                             message:@"Want some ice cream?"
                        cancelButton:@"No thanks"
                            okButton:@"Yes please!"
-                     onButtonTapped:^(OHAlertView *alert, NSInteger buttonIndex)
+                      buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex)
 	 {
 		 NSLog(@"button tapped: %d",buttonIndex);
 		 
@@ -45,10 +45,10 @@
          {	 
 			 NSArray* flavors = [NSArray arrayWithObjects:@"chocolate",@"vanilla",@"strawberry",@"coffee",nil];
 			 [OHAlertView showAlertWithTitle:@"Flavor"
-									   message:@"Which flavor do you prefer?"
-								  cancelButton:@"Cancel"
-								  otherButtons:flavors
-								onButtonTapped:^(OHAlertView *alert, NSInteger buttonIndex)
+                                     message:@"Which flavor do you prefer?"
+                                cancelButton:@"Cancel"
+                                otherButtons:flavors
+                               buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex)
 			  {
 				  NSLog(@"button tapped: %d",buttonIndex);
 				  if (buttonIndex == alert.cancelButtonIndex)
@@ -71,7 +71,7 @@
                                 message:@"This is a demo message"
                            cancelButton:nil
                            otherButtons:[NSArray arrayWithObject:@"OK"]
-                         onButtonTapped:^(OHAlertView* alert, NSInteger buttonIndex)
+                          buttonHandler:^(OHAlertView* alert, NSInteger buttonIndex)
       {
           if (buttonIndex == -1)
           {

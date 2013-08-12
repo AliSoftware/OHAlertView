@@ -19,14 +19,14 @@
 #pragma mark - Constructors
 
 +(void)showAlertWithTitle:(NSString *)title message:(NSString *)message
-			 cancelButton:(NSString *)cancelButtonTitle
-			 otherButtons:(NSArray *)otherButtonTitles
-		   onButtonTapped:(OHAlertViewButtonHandler)handler
+             cancelButton:(NSString *)cancelButtonTitle
+             otherButtons:(NSArray *)otherButtonTitles
+            buttonHandler:(OHAlertViewButtonHandler)handler
 {
 	OHAlertView* alert = [[self alloc] initWithTitle:title message:message
                                         cancelButton:cancelButtonTitle
                                         otherButtons:otherButtonTitles
-                                      onButtonTapped:handler];
+                                       buttonHandler:handler];
 	[alert show];
 #if ! __has_feature(objc_arc)
 	[alert autorelease];
@@ -34,14 +34,14 @@
 }
 
 +(void)showAlertWithTitle:(NSString *)title message:(NSString *)message
-			 cancelButton:(NSString *)cancelButtonTitle
-				 okButton:(NSString *)okButton // same as using a 1-item array for otherButtons
-		   onButtonTapped:(void(^)(OHAlertView* alert, NSInteger buttonIndex))handler
+             cancelButton:(NSString *)cancelButtonTitle
+                 okButton:(NSString *)okButton // same as using a 1-item array for otherButtons
+            buttonHandler:(OHAlertViewButtonHandler)handler
 {
 	[self showAlertWithTitle:title message:message
-				cancelButton:cancelButtonTitle
-				otherButtons:okButton ? [NSArray arrayWithObject:okButton] : nil
-			  onButtonTapped:handler];
+                cancelButton:cancelButtonTitle
+                otherButtons:okButton ? [NSArray arrayWithObject:okButton] : nil
+               buttonHandler:handler];
 }
 
 
@@ -52,14 +52,14 @@
     [self showAlertWithTitle:title message:message
                 cancelButton:dismissButtonTitle
                 otherButtons:nil
-              onButtonTapped:nil];
+               buttonHandler:nil];
 }
 
 
 -(id)initWithTitle:(NSString *)title message:(NSString *)message
-	  cancelButton:(NSString *)cancelButtonTitle
-	  otherButtons:(NSArray *)otherButtonTitles
-	onButtonTapped:(void(^)(OHAlertView* alert, NSInteger buttonIndex))handler
+      cancelButton:(NSString *)cancelButtonTitle
+      otherButtons:(NSArray *)otherButtonTitles
+     buttonHandler:(OHAlertViewButtonHandler)handler
 {
 	// Note: need to send at least the first button because if the otherButtonTitles parameter is nil, self.firstOtherButtonIndex will be -1
 	NSString* firstOther = (otherButtonTitles && ([otherButtonTitles count]>0)) ? [otherButtonTitles objectAtIndex:0] : nil;
