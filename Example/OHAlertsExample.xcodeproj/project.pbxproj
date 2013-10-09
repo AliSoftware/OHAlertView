@@ -66,7 +66,7 @@
 				09530E8512F74FE400A2753C /* OHAlertView.m */,
 			);
 			name = OHAlertView;
-			path = ..;
+			path = ../OHAlertView;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
