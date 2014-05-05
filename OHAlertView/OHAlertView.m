@@ -50,6 +50,7 @@
 #endif
 }
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
 +(void)showEmailAndPasswordAlertWithTitle:(NSString *)title message:(NSString *)message
                              cancelButton:(NSString *)cancelButtonTitle
                              otherButtons:(NSArray *)otherButtonTitles
@@ -77,7 +78,7 @@
                 otherButtons:okButton ? [NSArray arrayWithObject:okButton] : nil
                buttonHandler:handler];
 }
-
+#endif
 
 +(void)showAlertWithTitle:(NSString *)title
                   message:(NSString *)message
