@@ -33,6 +33,7 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
             buttonHandler:(OHAlertViewButtonHandler)handler;
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
+
 /**
  *	Create and immediately display an AlertView with an alert style.
  *
@@ -65,6 +66,7 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
                              cancelButton:(NSString *)cancelButtonTitle
                              otherButtons:(NSArray *)otherButtonTitles
                             buttonHandler:(OHAlertViewButtonHandler)handler;
+
 #endif
 
 /**
