@@ -30,9 +30,6 @@
                                         otherButtons:otherButtonTitles
                                        buttonHandler:handler];
 	[alert show];
-#if ! __has_feature(objc_arc)
-	[alert autorelease];
-#endif
 }
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
@@ -51,9 +48,6 @@
                                        buttonHandler:handler];
     alert.alertViewStyle = alertStyle;
 	[alert show];
-#if ! __has_feature(objc_arc)
-	[alert autorelease];
-#endif
 }
 
 +(void)showEmailAndPasswordAlertWithTitle:(NSString *)title
@@ -70,9 +64,6 @@
     alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
     [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeEmailAddress];
 	[alert show];
-#if ! __has_feature(objc_arc)
-	[alert autorelease];
-#endif
 }
 
 #endif
@@ -140,17 +131,11 @@
     {
         // Cancel and release timer
         dispatch_source_cancel(timer);
-#if ! __has_feature(objc_arc)
-        dispatch_release(timer);
-#endif
         timer = nil;
         
         // Execute final handler
         finalHandler(bhAlert, bhButtonIndex);
     };
-#if ! __has_feature(objc_arc)
-    [finalHandler release];
-#endif
     
     NSString* baseMessage = self.message;
     dispatch_block_t updateMessage = countDownMessageFormat ? ^{
@@ -175,17 +160,6 @@
     dispatch_resume(timer);
 }
 
-
-
-/////////////////////////////////////////////////////////////////////////////
-#pragma mark - Memory Mgmt
-
-#if ! __has_feature(objc_arc)
--(void)dealloc {
-	[_buttonHandler release];
-	[super dealloc];
-}
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - UIAlertView Delegate Methods

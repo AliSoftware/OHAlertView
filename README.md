@@ -51,15 +51,15 @@ _(You can even add a dynamic text on your alert to display the live countdown)_
           }
       }] showWithTimeout:12 timeoutButtonIndex:-1 timeoutMessageFormat:@"(Alert dismissed in %lus)"];
 
+## CocoaPods
+
+This class is referenced in CocoaPods, so you can simply add `pod OHAlertView` to your Podfile to add it to your pods.
+
 ## Compatibility Notes
 
 * This class uses blocks, which is a feature introduced in iOS 4.0.
-* This class is compatible with both ARC and non-ARC projects.
+* This class uses ARC.
 
 ## License
 
 This code is under MIT License.
-
-## CocoaPods
-
-This class is referenced in CocoaPods, so you can simply add `pod OHAlertView` to your Podfile to add it to your pods.
