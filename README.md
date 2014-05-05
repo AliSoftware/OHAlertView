@@ -1,3 +1,7 @@
+[![Version](http://cocoapod-badges.herokuapp.com/v/OHAlertView/badge.png)](http://cocoadocs.org/docsets/OHAlertView)
+[![Platform](http://cocoapod-badges.herokuapp.com/p/OHAlertView/badge.png)](http://cocoadocs.org/docsets/OHAlertView)
+
+
 ## About this class
 
 This class make it easier to use `UIAlertView` with blocks.

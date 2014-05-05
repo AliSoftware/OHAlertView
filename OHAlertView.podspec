@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.platform = :ios, '4.0'
   s.name         = "OHAlertView"
-  s.version      = "2.0.1"
+  s.version      = "2.1.0"
   s.summary      = "UIAlertView subclass that uses blocks to handle its callback (which make the code much more easier and readable)."
   s.description  = <<-DESC
                     UIAlertView subclass that uses blocks to handle the code to execute after the user tapped a button.
