@@ -34,6 +34,41 @@
 }
 
 +(void)showAlertWithTitle:(NSString *)title message:(NSString *)message
+               alertStyle:(UIAlertViewStyle)alertStyle
+             cancelButton:(NSString *)cancelButtonTitle
+             otherButtons:(NSArray *)otherButtonTitles
+            buttonHandler:(OHAlertViewButtonHandler)handler
+{
+	OHAlertView* alert = [[self alloc] initWithTitle:title message:message
+                                        cancelButton:cancelButtonTitle
+                                        otherButtons:otherButtonTitles
+                                       buttonHandler:handler];
+    alert.alertViewStyle = alertStyle;
+	[alert show];
+#if ! __has_feature(objc_arc)
+	[alert autorelease];
+#endif
+}
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
++(void)showEmailAndPasswordAlertWithTitle:(NSString *)title message:(NSString *)message
+                             cancelButton:(NSString *)cancelButtonTitle
+                             otherButtons:(NSArray *)otherButtonTitles
+                            buttonHandler:(OHAlertViewButtonHandler)handler
+{
+	OHAlertView* alert = [[self alloc] initWithTitle:title message:message
+                                        cancelButton:cancelButtonTitle
+                                        otherButtons:otherButtonTitles
+                                       buttonHandler:handler];
+    alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
+    [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeEmailAddress];
+	[alert show];
+#if ! __has_feature(objc_arc)
+	[alert autorelease];
+#endif
+}
+
++(void)showAlertWithTitle:(NSString *)title message:(NSString *)message
              cancelButton:(NSString *)cancelButtonTitle
                  okButton:(NSString *)okButton // same as using a 1-item array for otherButtons
             buttonHandler:(OHAlertViewButtonHandler)handler
@@ -43,7 +78,7 @@
                 otherButtons:okButton ? [NSArray arrayWithObject:okButton] : nil
                buttonHandler:handler];
 }
-
+#endif
 
 +(void)showAlertWithTitle:(NSString *)title
                   message:(NSString *)message
