@@ -15,6 +15,9 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
 
 /////////////////////////////////////////////////////////////////////////////
 
+#pragma mark - Commodity Constructors
+
+
 /**
  *	Create and immediately display an AlertView.
  *
@@ -31,6 +34,45 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
              cancelButton:(NSString *)cancelButtonTitle
              otherButtons:(NSArray *)otherButtonTitles
             buttonHandler:(OHAlertViewButtonHandler)handler;
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
+
+/**
+ *	Create and immediately display an AlertView with an alert style.
+ *
+ *	@param	title	The title of the AlertView (see UIAlertView)
+ *	@param	message	The message of the AlertView (see UIAlertView)
+  *	@param	alertStyle	The stlye of the AlertView (see UIAlertView)
+ *	@param	cancelButtonTitle	The title for the "cancel" button (see UIAlertView)
+ *	@param	otherButtonTitles	A NSArray of NSStrings containing titles for the other buttons (see UIAlertView)
+ *	@param	handler	The block that will be executed when the user taps on a button. This block takes:
+ *          - The OHAlertView as its first parameter, useful to get the firstOtherButtonIndex from it for example
+ *          - The NSInteger as its second parameter, representing the index of the button that has been tapped
+ */
++(void)showAlertWithTitle:(NSString *)title
+                  message:(NSString *)message
+               alertStyle:(UIAlertViewStyle)alertStyle
+             cancelButton:(NSString *)cancelButtonTitle
+             otherButtons:(NSArray *)otherButtonTitles
+            buttonHandler:(OHAlertViewButtonHandler)handler;
+
+/**
+ *	Create and immediately display an AlertView with email and password field.
+ *
+ *	@param	title	The title of the AlertView (see UIAlertView)
+ *	@param	message	The message of the AlertView (see UIAlertView)
+ *	@param	otherButtonTitles	A NSArray of NSStrings containing titles for the other buttons (see UIAlertView)
+ *	@param	handler	The block that will be executed when the user taps on a button. This block takes:
+ *          - The OHAlertView as its first parameter, useful to get the firstOtherButtonIndex from it for example
+ *          - The NSInteger as its second parameter, representing the index of the button that has been tapped
+ */
++(void)showEmailAndPasswordAlertWithTitle:(NSString *)title
+                                  message:(NSString *)message
+                             cancelButton:(NSString *)cancelButtonTitle
+                             otherButtons:(NSArray *)otherButtonTitles
+                            buttonHandler:(OHAlertViewButtonHandler)handler;
+
+#endif
 
 /**
  *	Create and immediately display an AlertView with two buttons.
@@ -67,6 +109,9 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
                   message:(NSString *)message
             dismissButton:(NSString *)dismissButtonTitle;
 
+
+#pragma mark - Instance Methods
+
 /**
  *	Create a new AlertView. Designed initializer.
  *
@@ -84,8 +129,6 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
                 cancelButton:(NSString *)cancelButtonTitle
                 otherButtons:(NSArray *)otherButtonTitles
                buttonHandler:(OHAlertViewButtonHandler)handler;
-
-/////////////////////////////////////////////////////////////////////////////
 
 
 /**

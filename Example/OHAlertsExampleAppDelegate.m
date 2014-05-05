@@ -35,7 +35,7 @@
                            okButton:@"Yes please!"
                       buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex)
 	 {
-		 NSLog(@"button tapped: %d",buttonIndex);
+		 NSLog(@"button tapped: %ld",(long)buttonIndex);
 		 
 		 if (buttonIndex == alert.cancelButtonIndex)
          {
@@ -50,7 +50,7 @@
                                 otherButtons:flavors
                                buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex)
 			  {
-				  NSLog(@"button tapped: %d",buttonIndex);
+				  NSLog(@"button tapped: %ld",(long)buttonIndex);
 				  if (buttonIndex == alert.cancelButtonIndex)
                   {
 					  self.status.text = @"Your order has been cancelled";

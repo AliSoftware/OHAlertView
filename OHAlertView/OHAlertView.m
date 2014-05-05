@@ -16,54 +16,94 @@
 @synthesize buttonHandler = _buttonHandler;
 
 /////////////////////////////////////////////////////////////////////////////
-#pragma mark - Constructors
+#pragma mark - Commodity Constructors
 
-+(void)showAlertWithTitle:(NSString *)title message:(NSString *)message
++(void)showAlertWithTitle:(NSString *)title
+                  message:(NSString *)message
              cancelButton:(NSString *)cancelButtonTitle
              otherButtons:(NSArray *)otherButtonTitles
             buttonHandler:(OHAlertViewButtonHandler)handler
 {
-	OHAlertView* alert = [[self alloc] initWithTitle:title message:message
+	OHAlertView* alert = [[self alloc] initWithTitle:title
+                                             message:message
                                         cancelButton:cancelButtonTitle
                                         otherButtons:otherButtonTitles
                                        buttonHandler:handler];
 	[alert show];
-#if ! __has_feature(objc_arc)
-	[alert autorelease];
-#endif
 }
 
-+(void)showAlertWithTitle:(NSString *)title message:(NSString *)message
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
+
++(void)showAlertWithTitle:(NSString *)title
+                  message:(NSString *)message
+               alertStyle:(UIAlertViewStyle)alertStyle
+             cancelButton:(NSString *)cancelButtonTitle
+             otherButtons:(NSArray *)otherButtonTitles
+            buttonHandler:(OHAlertViewButtonHandler)handler
+{
+	OHAlertView* alert = [[self alloc] initWithTitle:title
+                                             message:message
+                                        cancelButton:cancelButtonTitle
+                                        otherButtons:otherButtonTitles
+                                       buttonHandler:handler];
+    alert.alertViewStyle = alertStyle;
+	[alert show];
+}
+
++(void)showEmailAndPasswordAlertWithTitle:(NSString *)title
+                                  message:(NSString *)message
+                             cancelButton:(NSString *)cancelButtonTitle
+                             otherButtons:(NSArray *)otherButtonTitles
+                            buttonHandler:(OHAlertViewButtonHandler)handler
+{
+	OHAlertView* alert = [[self alloc] initWithTitle:title
+                                             message:message
+                                        cancelButton:cancelButtonTitle
+                                        otherButtons:otherButtonTitles
+                                       buttonHandler:handler];
+    alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
+    [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeEmailAddress];
+	[alert show];
+}
+
+#endif
+
++(void)showAlertWithTitle:(NSString *)title
+                  message:(NSString *)message
              cancelButton:(NSString *)cancelButtonTitle
                  okButton:(NSString *)okButton // same as using a 1-item array for otherButtons
             buttonHandler:(OHAlertViewButtonHandler)handler
 {
-	[self showAlertWithTitle:title message:message
+	[self showAlertWithTitle:title
+                     message:message
                 cancelButton:cancelButtonTitle
                 otherButtons:okButton ? [NSArray arrayWithObject:okButton] : nil
                buttonHandler:handler];
 }
 
-
 +(void)showAlertWithTitle:(NSString *)title
                   message:(NSString *)message
             dismissButton:(NSString *)dismissButtonTitle
 {
-    [self showAlertWithTitle:title message:message
+    [self showAlertWithTitle:title
+                     message:message
                 cancelButton:dismissButtonTitle
                 otherButtons:nil
                buttonHandler:nil];
 }
 
+#pragma mark - Instance Methods
 
--(id)initWithTitle:(NSString *)title message:(NSString *)message
+-(id)initWithTitle:(NSString *)title
+           message:(NSString *)message
       cancelButton:(NSString *)cancelButtonTitle
       otherButtons:(NSArray *)otherButtonTitles
      buttonHandler:(OHAlertViewButtonHandler)handler
 {
 	// Note: need to send at least the first button because if the otherButtonTitles parameter is nil, self.firstOtherButtonIndex will be -1
 	NSString* firstOther = (otherButtonTitles && ([otherButtonTitles count]>0)) ? [otherButtonTitles objectAtIndex:0] : nil;
-	self = [super initWithTitle:title message:message
+	self = [super initWithTitle:title
+                        message:message
 					   delegate:self
 			  cancelButtonTitle:cancelButtonTitle
 			  otherButtonTitles:firstOther,nil];
@@ -78,9 +118,6 @@
 	return self;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-#pragma mark - Public Methods
-
 -(void)showWithTimeout:(unsigned long)timeoutInSeconds
     timeoutButtonIndex:(NSInteger)timeoutButtonIndex
   timeoutMessageFormat:(NSString*)countDownMessageFormat
@@ -94,17 +131,11 @@
     {
         // Cancel and release timer
         dispatch_source_cancel(timer);
-#if ! __has_feature(objc_arc)
-        dispatch_release(timer);
-#endif
         timer = nil;
         
         // Execute final handler
         finalHandler(bhAlert, bhButtonIndex);
     };
-#if ! __has_feature(objc_arc)
-    [finalHandler release];
-#endif
     
     NSString* baseMessage = self.message;
     dispatch_block_t updateMessage = countDownMessageFormat ? ^{
@@ -129,15 +160,6 @@
     dispatch_resume(timer);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-#pragma mark - Memory Mgmt
-
-#if ! __has_feature(objc_arc)
--(void)dealloc {
-	[_buttonHandler release];
-	[super dealloc];
-}
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - UIAlertView Delegate Methods
