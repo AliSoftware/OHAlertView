@@ -15,6 +15,9 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
 
 /////////////////////////////////////////////////////////////////////////////
 
+#pragma mark - Commodity Constructors
+
+
 /**
  *	Create and immediately display an AlertView.
  *
@@ -46,7 +49,8 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
  *          - The OHAlertView as its first parameter, useful to get the firstOtherButtonIndex from it for example
  *          - The NSInteger as its second parameter, representing the index of the button that has been tapped
  */
-+(void)showAlertWithTitle:(NSString *)title message:(NSString *)message
++(void)showAlertWithTitle:(NSString *)title
+                  message:(NSString *)message
                alertStyle:(UIAlertViewStyle)alertStyle
              cancelButton:(NSString *)cancelButtonTitle
              otherButtons:(NSArray *)otherButtonTitles
@@ -62,7 +66,8 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
  *          - The OHAlertView as its first parameter, useful to get the firstOtherButtonIndex from it for example
  *          - The NSInteger as its second parameter, representing the index of the button that has been tapped
  */
-+(void)showEmailAndPasswordAlertWithTitle:(NSString *)title message:(NSString *)message
++(void)showEmailAndPasswordAlertWithTitle:(NSString *)title
+                                  message:(NSString *)message
                              cancelButton:(NSString *)cancelButtonTitle
                              otherButtons:(NSArray *)otherButtonTitles
                             buttonHandler:(OHAlertViewButtonHandler)handler;
@@ -104,6 +109,9 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
                   message:(NSString *)message
             dismissButton:(NSString *)dismissButtonTitle;
 
+
+#pragma mark - Instance Methods
+
 /**
  *	Create a new AlertView. Designed initializer.
  *
@@ -121,8 +129,6 @@ typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonInde
                 cancelButton:(NSString *)cancelButtonTitle
                 otherButtons:(NSArray *)otherButtonTitles
                buttonHandler:(OHAlertViewButtonHandler)handler;
-
-/////////////////////////////////////////////////////////////////////////////
 
 
 /**
