@@ -1,24 +1,23 @@
 Pod::Spec.new do |s|
-  s.platform = :ios, '4.0'
-  s.name         = "OHAlertView"
-  s.version      = "2.2.0"
-  s.summary      = "UIAlertView subclass that uses blocks to handle its callback (which make the code much more easier and readable)."
-  s.description  = <<-DESC
-                    UIAlertView subclass that uses blocks to handle the code to execute after the user tapped a button.
-                    
-                    No need to implement a delegate method anymore,
-                    and this makes it much more easier to manage especially when you use multiple AlertView in the same class.
-                    
-                    This class also allows you to handle AlertViews with a timeout
-                    (it simulates a tap on the button you specify after a given number of seconds)
-                 DESC
-  s.homepage     = "https://github.com/AliSoftware/OHAlertView"
-  s.license      = "MIT"
-  s.authors      = { 'Olivier Halligon' => 'olivier.halligon+ae@gmail.com' }
+    s.name         = "OHAlertView"
+    s.version      = "3.0.0"
+    s.summary      = "AlertView helper with blocks and a simple to use API. Uses UIAlertController in iOS 8+, UIAlertView otherwise."
+    s.description  = <<-DESC
+        AlertView helper that uses blocks to handle its callback.
 
-  s.source       = { :git => "https://github.com/AliSoftware/OHAlertView.git", :tag => s.version.to_s }
-  s.source_files = "OHAlertView/*.{m,h}"
-  s.public_header_files = "OHAlertView/*.h"
-  s.frameworks = 'Foundation', 'UIKit'
-  s.requires_arc = true
+         * If your deployment target is eariler than iOS 8, this will use UIAlertView
+         * If your deployment target is iOS 8 or above, this will use the new UIAlertController
+    DESC
+
+    s.homepage     = "https://github.com/AliSoftware/OHAlertView"
+    s.license      = "MIT"
+    s.authors      = { 'Olivier Halligon' => 'olivier.halligon+ae@gmail.com' }
+
+    s.source       = { :git => "https://github.com/AliSoftware/OHAlertView.git", :tag => s.version.to_s }
+    s.source_files = "OHAlertView/*.{m,h}"
+    s.public_header_files = "OHAlertView/*.h"
+
+    s.frameworks = 'Foundation', 'UIKit'
+    s.requires_arc = true
+    s.ios.deployment_target = '5.0'
 end

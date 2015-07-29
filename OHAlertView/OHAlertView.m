@@ -7,8 +7,30 @@
 //
 
 #import "OHAlertView.h"
+#import <objc/runtime.h>
 
-@interface OHAlertView () <UIAlertViewDelegate> @end
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < 80000
+#define USE_UIALERTVIEW 1
+#else
+#define USE_UIALERTVIEW 0
+#endif
+
+
+#if USE_UIALERTVIEW
+@interface OHAlertView () <UIAlertViewDelegate>
+@property(nonatomic, weak) UIAlertView* alert;
+#else
+@interface OHAlertView () <UITextFieldDelegate>
+@property(nonatomic, weak) UIAlertController* alert;
+#endif
+
+@property (nonatomic, copy) NSString* title;
+@property (nonatomic, copy) NSString* message;
+@property (nonatomic, copy) NSString* cancelButtonTitle;
+@property (nonatomic, copy) NSArray* otherButtonTitles;
+@property (nonatomic, copy) OHAlertViewButtonHandler buttonHandler;
+
+@end
 
 
 
@@ -32,11 +54,9 @@
 	[alert show];
 }
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 50000
-
 +(void)showAlertWithTitle:(NSString *)title
                   message:(NSString *)message
-               alertStyle:(UIAlertViewStyle)alertStyle
+               alertStyle:(OHAlertViewStyle)alertStyle
              cancelButton:(NSString *)cancelButtonTitle
              otherButtons:(NSArray *)otherButtonTitles
             buttonHandler:(OHAlertViewButtonHandler)handler
@@ -48,37 +68,6 @@
                                        buttonHandler:handler];
     alert.alertViewStyle = alertStyle;
 	[alert show];
-}
-
-+(void)showEmailAndPasswordAlertWithTitle:(NSString *)title
-                                  message:(NSString *)message
-                             cancelButton:(NSString *)cancelButtonTitle
-                             otherButtons:(NSArray *)otherButtonTitles
-                            buttonHandler:(OHAlertViewButtonHandler)handler
-{
-	OHAlertView* alert = [[self alloc] initWithTitle:title
-                                             message:message
-                                        cancelButton:cancelButtonTitle
-                                        otherButtons:otherButtonTitles
-                                       buttonHandler:handler];
-    alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
-    [[alert textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeEmailAddress];
-	[alert show];
-}
-
-#endif
-
-+(void)showAlertWithTitle:(NSString *)title
-                  message:(NSString *)message
-             cancelButton:(NSString *)cancelButtonTitle
-                 okButton:(NSString *)okButton // same as using a 1-item array for otherButtons
-            buttonHandler:(OHAlertViewButtonHandler)handler
-{
-	[self showAlertWithTitle:title
-                     message:message
-                cancelButton:cancelButtonTitle
-                otherButtons:okButton ? [NSArray arrayWithObject:okButton] : nil
-               buttonHandler:handler];
 }
 
 +(void)showAlertWithTitle:(NSString *)title
@@ -94,75 +83,173 @@
 
 #pragma mark - Instance Methods
 
--(id)initWithTitle:(NSString *)title
-           message:(NSString *)message
-      cancelButton:(NSString *)cancelButtonTitle
-      otherButtons:(NSArray *)otherButtonTitles
-     buttonHandler:(OHAlertViewButtonHandler)handler
+-(instancetype)initWithTitle:(NSString *)title
+                     message:(NSString *)message
+                cancelButton:(NSString *)cancelButtonTitle
+                otherButtons:(NSArray *)otherButtonTitles
+               buttonHandler:(OHAlertViewButtonHandler)handler
 {
-	// Note: need to send at least the first button because if the otherButtonTitles parameter is nil, self.firstOtherButtonIndex will be -1
-	NSString* firstOther = (otherButtonTitles && ([otherButtonTitles count]>0)) ? [otherButtonTitles objectAtIndex:0] : nil;
-	self = [super initWithTitle:title
-                        message:message
-					   delegate:self
-			  cancelButtonTitle:cancelButtonTitle
-			  otherButtonTitles:firstOther,nil];
-    
-	if (self)
+    self = [super init];
+    if (self)
     {
-		for(NSInteger idx = 1; idx<[otherButtonTitles count];++idx) {
-			[self addButtonWithTitle: [otherButtonTitles objectAtIndex:idx] ];
-		}
-		self.buttonHandler = handler;
-	}
+        self.title = title;
+        self.message = message;
+        self.cancelButtonTitle = cancelButtonTitle;
+        self.otherButtonTitles = otherButtonTitles;
+        self.buttonHandler = handler;
+
+        _cancelButtonIndex = cancelButtonTitle ? 0 : -1;
+        _firstOtherButtonIndex = otherButtonTitles ? _cancelButtonIndex+1 : -1;
+    }
 	return self;
 }
 
--(void)showWithTimeout:(unsigned long)timeoutInSeconds
-    timeoutButtonIndex:(NSInteger)timeoutButtonIndex
-  timeoutMessageFormat:(NSString*)countDownMessageFormat
+-(void)show
 {
-    __block dispatch_source_t timer = nil;
-    __block unsigned long countDown = timeoutInSeconds;
+#if USE_UIALERTVIEW
     
-    // Add some timer sugar to the completion handler
-    OHAlertViewButtonHandler finalHandler = [self.buttonHandler copy];
-    self.buttonHandler = ^(OHAlertView* bhAlert, NSInteger bhButtonIndex)
+    // Note: need to send at least the first button because if the otherButtonTitles parameter is nil, self.firstOtherButtonIndex will be -1
+    NSString* firstOther = (self.otherButtonTitles && ([self.otherButtonTitles count]>0)) ? [self.otherButtonTitles objectAtIndex:0] : nil;
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:self.title
+                                                    message:self.message
+                                                   delegate:self
+                                          cancelButtonTitle:self.cancelButtonTitle
+                                          otherButtonTitles:firstOther,nil];
+    for (NSInteger idx=1; idx<self.otherButtonTitles.count; ++idx) {
+        [alert addButtonWithTitle:self.otherButtonTitles[idx]];
+    }
+    switch (self.alertViewStyle)
     {
-        // Cancel and release timer
-        dispatch_source_cancel(timer);
-        timer = nil;
-        
-        // Execute final handler
-        finalHandler(bhAlert, bhButtonIndex);
+        case OHAlertViewStyleDefault:
+            alert.alertViewStyle = UIAlertViewStyleDefault;
+            break;
+        case OHAlertViewStylePlainTextInput:
+            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+            break;
+        case OHAlertViewStyleSecureTextInput:
+            alert.alertViewStyle = UIAlertViewStyleSecureTextInput;
+            break;
+        case OHAlertViewStyleLoginAndPasswordInput:
+            alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
+            break;
+        case OHAlertViewStyleEmailAndPasswordInput:
+            alert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
+            [alert textFieldAtIndex:0].keyboardType = UIKeyboardTypeEmailAddress;
+            break;
+    }
+    _cancelButtonIndex = alert.cancelButtonIndex;
+    _firstOtherButtonIndex = alert.firstOtherButtonIndex;
+    self.alert = alert;
+    [self makeAlertRetainSelf];
+    [alert show];
+    
+#else
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:self.title
+                                                                   message:self.message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    void (^(^handler)(NSInteger))(UIAlertAction*) = ^(NSInteger index){
+        return ^(UIAlertAction* _) {
+            if (self.buttonHandler) {
+                self.buttonHandler(self, index);
+            }
+        };
     };
     
-    NSString* baseMessage = self.message;
-    dispatch_block_t updateMessage = countDownMessageFormat ? ^{
-        self.message = [NSString stringWithFormat:@"%@\n\n%@", baseMessage, [NSString stringWithFormat:countDownMessageFormat, countDown]];
-    } : ^{ /* NOOP */ };
-    updateMessage();
+    if (self.cancelButtonTitle)
+    {
+        [alert addAction:[UIAlertAction actionWithTitle:self.cancelButtonTitle style:UIAlertActionStyleCancel handler:handler(self.cancelButtonIndex)]];
+    }
     
-    // Schedule timer every second to update message. When timer reach zero, dismiss the alert
-    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-    dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC), 1*NSEC_PER_SEC, 0.1*NSEC_PER_SEC);
-    dispatch_source_set_event_handler(timer, ^{
-        --countDown;
-        updateMessage();
-        if (countDown <= 0)
-        {
-            [self dismissWithClickedButtonIndex:timeoutButtonIndex animated:YES];
-        }
-    });
+    NSInteger idx = self.firstOtherButtonIndex;
+    for (NSString* buttonTitle in self.otherButtonTitles)
+    {
+        [alert addAction:[UIAlertAction actionWithTitle:buttonTitle style:UIAlertActionStyleDefault handler:handler(idx++)]];
+    }
     
-    // Show the alert and start the timer now
-    [self show];
-    dispatch_resume(timer);
+    switch (self.alertViewStyle)
+    {
+        case OHAlertViewStyleDefault:
+            break;
+        case OHAlertViewStylePlainTextInput: {
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.delegate = self;
+            }];
+        } break;
+        case OHAlertViewStyleSecureTextInput: {
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.secureTextEntry = YES;
+                textField.delegate = self;
+            }];
+        } break;
+        case OHAlertViewStyleLoginAndPasswordInput: {
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.delegate = self;
+            }];
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.secureTextEntry = YES;
+                textField.delegate = self;
+            }];
+        } break;
+        case OHAlertViewStyleEmailAndPasswordInput: {
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.keyboardType = UIKeyboardTypeEmailAddress;
+                textField.delegate = self;
+            }];
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.secureTextEntry = YES;
+                textField.delegate = self;
+            }];
+        } break;
+    }
+    
+    self.alert = alert;
+    [self makeAlertRetainSelf];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+    [self textFieldDidChange:nil];
+    
+    // Show on topmost ViewController
+    UIWindow* mainWindow = [[UIApplication sharedApplication] keyWindow] ?: [[[UIApplication sharedApplication] windows] lastObject];
+    UIViewController* rootVC = mainWindow.rootViewController;
+    UIViewController* topmostVC = rootVC;
+    while (topmostVC != nil) {
+        if (topmostVC.navigationController) topmostVC = topmostVC.navigationController.topViewController;
+        if (topmostVC.presentedViewController == nil) break;
+        topmostVC = topmostVC.presentedViewController;
+    }
+    [topmostVC presentViewController:alert animated:YES completion:nil];
+#endif
+}
+
+-(NSInteger)numberOfButtons
+{
+    return self.otherButtonTitles.count + (self.cancelButtonTitle ? 1 : 0);
+}
+
+-(UITextField*)textFieldAtIndex:(NSInteger)textFieldIndex
+{
+#if USE_UIALERTVIEW
+    return [self.alert textFieldAtIndex:textFieldIndex];
+#else
+    return self.alert.textFields[textFieldIndex];
+#endif
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
-#pragma mark - UIAlertView Delegate Methods
+#pragma mark - Retain Cycle Managment
+
+static void* kAssociatedAlertViewObject = &kAssociatedAlertViewObject;
+
+-(void)makeAlertRetainSelf
+{
+    objc_setAssociatedObject(self.alert, &kAssociatedAlertViewObject, self, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+#pragma mark - Delegate Methods
+
+#if USE_UIALERTVIEW
 
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -172,7 +259,8 @@
 	}
 }
 
--(BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView {
+-(BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
+{
     BOOL enable;
     if (self.shouldEnableFirstButton) {
         enable = self.shouldEnableFirstButton((OHAlertView *)alertView);
@@ -181,5 +269,18 @@
     }
     return enable;
 }
+
+#else
+
+-(void)textFieldDidChange:(NSNotification*)notif
+{
+    UIAlertAction* firstNonCancelAction = self.firstOtherButtonIndex >= 0 ? self.alert.actions[self.firstOtherButtonIndex] : nil;
+    if (self.shouldEnableFirstButton && firstNonCancelAction)
+    {
+        firstNonCancelAction.enabled = self.shouldEnableFirstButton(self);
+    }
+}
+
+#endif
 
 @end

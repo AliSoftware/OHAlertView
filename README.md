@@ -4,7 +4,7 @@
 
 ## About this class
 
-This class make it easier to use `UIAlertView` with blocks.
+This class make it easier to use Alert Views with blocks, and make the transition between `UIAlertView` (iOS < 8.0) to UIAlertController (iOS 8.0+)
 
 This allows you to provide directly the code to execute (as a block) in return to the tap on a button,
 instead of declaring a delegate and implementing the corresponding methods.
@@ -18,7 +18,7 @@ _Note: You may also be interested in [OHActionSheet](https://github.com/AliSoftw
     [OHAlertView showAlertWithTitle:@"Alert Demo"
                             message:@"You like this sample?"
                        cancelButton:@"No"
-                           okButton:@"Yes"
+                       otherButtons:@[@"Yes"]
                       buttonHandler:^(OHAlertView* alert, NSInteger buttonIndex)
      {
          NSLog(@"button tapped: %d",buttonIndex);
@@ -30,26 +30,6 @@ _Note: You may also be interested in [OHActionSheet](https://github.com/AliSoftw
          }
      }];
      
-## Alerts with timeout
-
-You can also use this class to generate an AlertView that will be dismissed after a given time.
-_(You can even add a dynamic text on your alert to display the live countdown)_
-
-    [[[OHAlertView alloc] initWithTitle:@"Alert Demo"
-                                message:@"This is a demo message"
-                           cancelButton:nil
-                           otherButtons:[NSArray arrayWithObject:@"OK"]
-                          buttonHandler:^(OHAlertView* alert, NSInteger buttonIndex)
-      {
-          if (buttonIndex == -1)
-          {
-              self.status.text = @"Demo alert dismissed automatically after timeout!";
-          }
-          else
-          {
-              self.status.text = @"Demo alert dismissed by user!";
-          }
-      }] showWithTimeout:12 timeoutButtonIndex:-1 timeoutMessageFormat:@"(Alert dismissed in %lus)"];
 
 ## CocoaPods
 
@@ -59,6 +39,7 @@ This class is referenced in CocoaPods, so you can simply add `pod OHAlertView` t
 
 * This class uses blocks, which is a feature introduced in iOS 4.0.
 * This class uses ARC.
+* This class internally uses `UIAlertView` if you are targeting iOS < 8.0, and use `UIAlertController` if you are targeting iOS8 or above
 
 ## License
 
