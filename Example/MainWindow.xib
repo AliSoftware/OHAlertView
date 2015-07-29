@@ -3,12 +3,12 @@
 	<data>
 		<int key="IBDocument.SystemTarget">2048</int>
 		<string key="IBDocument.SystemVersion">14E46</string>
-		<string key="IBDocument.InterfaceBuilderVersion">7706</string>
+		<string key="IBDocument.InterfaceBuilderVersion">7702</string>
 		<string key="IBDocument.AppKitVersion">1348.17</string>
 		<string key="IBDocument.HIToolboxVersion">758.70</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">7703</string>
+			<string key="NS.object.0">7701</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
@@ -105,7 +105,7 @@
 						<string key="NSFrame">{{20, 130}, {280, 37}}</string>
 						<reference key="NSSuperview" ref="538351832"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="841852568"/>
+						<reference key="NSNextKeyView" ref="894322984"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
@@ -125,6 +125,7 @@
 						<string key="NSFrame">{{20, 174}, {280, 44}}</string>
 						<reference key="NSSuperview" ref="538351832"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="841852568"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
@@ -132,7 +133,7 @@
 						<int key="IBUIButtonType">1</int>
 						<reference key="IBUINormalTitleColor" ref="862019999"/>
 						<reference key="IBUIHighlightedTitleColor" ref="34193676"/>
-						<string key="IBUINormalTitle">Textfield with validation example</string>
+						<string key="IBUINormalTitle">TextField with validation example</string>
 						<reference key="IBUINormalTitleShadowColor" ref="823323164"/>
 						<reference key="IBUIFontDescription" ref="95042656"/>
 						<reference key="IBUIFont" ref="600433790"/>
@@ -144,6 +145,7 @@
 						<string key="NSFrame">{{20, 293}, {280, 45}}</string>
 						<reference key="NSSuperview" ref="538351832"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">7</int>
@@ -364,6 +366,7 @@
 						<string key="showAlert1">id</string>
 						<string key="showAlert2">id</string>
 						<string key="showAlert3">id</string>
+						<string key="showAlert4WithTextField">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="showAlert1">
@@ -376,6 +379,10 @@
 						</object>
 						<object class="IBActionInfo" key="showAlert3">
 							<string key="name">showAlert3</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showAlert4WithTextField">
+							<string key="name">showAlert4WithTextField</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

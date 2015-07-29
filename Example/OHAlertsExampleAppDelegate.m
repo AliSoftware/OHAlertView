@@ -87,16 +87,23 @@
 
 -(IBAction)showAlert4WithTextField
 {
-    OHAlertView *ohav = [[OHAlertView alloc] initWithTitle:@"Text field" message:@"Email:" cancelButton:@"Cancel" otherButtons:@[@"OK"] buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex) {
-        
+    OHAlertView *alert = [[OHAlertView alloc] initWithTitle:@"Email"
+                                                    message:@"Enter a valid email xxx@yyy:"
+                                               cancelButton:@"Cancel"
+                                               otherButtons:@[@"OK"]
+                                              buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex)
+    {
+        NSString* email = [alert textFieldAtIndex:0].text;
+        self.status.text = [NSString stringWithFormat:@"Email entered: %@", email];
     }];
     
-    [ohav setShouldEnableFirstButton:^BOOL(OHAlertView* alert) {
+    NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"[0-9A-Za-z+.-_]+@[0-9A-Za-z.]+" options:0 error:nil];
+    [alert setShouldEnableFirstButton:^BOOL(OHAlertView* alert) {
         NSString *email = [alert textFieldAtIndex:0].text;
-        return (email && email.length > 0);
+        return email && [regex numberOfMatchesInString:email options:0 range:NSMakeRange(0, email.length)] > 0;
     }];
-    ohav.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [ohav show];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert show];
 }
 
 /////////////////////////////////////////////////////////////////////////////
