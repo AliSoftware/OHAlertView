@@ -16,6 +16,7 @@
 -(IBAction)showAlert1;
 -(IBAction)showAlert2;
 -(IBAction)showAlert3;
+-(IBAction)showAlert4WithTextField;
 
 @end
 

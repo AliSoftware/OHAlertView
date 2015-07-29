@@ -172,4 +172,14 @@
 	}
 }
 
+-(BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView {
+    BOOL enable;
+    if (self.shouldEnableFirstButton) {
+        enable = self.shouldEnableFirstButton((OHAlertView *)alertView);
+    } else {
+        enable = YES;
+    }
+    return enable;
+}
+
 @end
