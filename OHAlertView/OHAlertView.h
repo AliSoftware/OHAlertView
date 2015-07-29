@@ -12,7 +12,10 @@
 @interface OHAlertView : UIAlertView
 
 typedef void(^OHAlertViewButtonHandler)(OHAlertView* alert, NSInteger buttonIndex);
+typedef BOOL (^OHShouldEnableFirstOtherButton)(OHAlertView *alert);
 @property (nonatomic, copy) OHAlertViewButtonHandler buttonHandler;
+/** block called by delegate to enable or not the first button, generally 'ok' */
+@property (nonatomic, copy) OHShouldEnableFirstOtherButton shouldEnableFirstButton;
 
 /////////////////////////////////////////////////////////////////////////////
 

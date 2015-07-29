@@ -85,6 +85,19 @@
 }
 
 
+-(IBAction)showAlert4WithTextField
+{
+    OHAlertView *ohav = [[OHAlertView alloc] initWithTitle:@"Text field" message:@"Email:" cancelButton:@"Cancel" otherButtons:@[@"OK"] buttonHandler:^(OHAlertView *alert, NSInteger buttonIndex) {
+        
+    }];
+    
+    [ohav setShouldEnableFirstButton:^BOOL(OHAlertView* alert) {
+        NSString *email = [alert textFieldAtIndex:0].text;
+        return (email && email.length > 0);
+    }];
+    ohav.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [ohav show];
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // MARK: -
