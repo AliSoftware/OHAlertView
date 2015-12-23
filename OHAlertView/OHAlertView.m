@@ -104,6 +104,15 @@
 	return self;
 }
 
+- (void)dealloc
+{
+    #if USE_UIALERTVIEW == 0
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UITextFieldTextDidChangeNotification
+                                                  object:nil];
+    #endif
+}
+
 -(void)show
 {
 #if USE_UIALERTVIEW

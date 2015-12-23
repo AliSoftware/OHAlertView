@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "OHAlertView"
-    s.version      = "3.0.0"
+    s.version      = "3.0.1"
     s.summary      = "AlertView helper with blocks and a simple to use API. Uses UIAlertController in iOS 8+, UIAlertView otherwise."
     s.description  = <<-DESC
         AlertView helper that uses blocks to handle its callback.
